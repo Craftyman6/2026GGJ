@@ -11,4 +11,5 @@ function love.draw()
 	love.graphics.rectangle("fill", 0, 0, 500, 500)
 	love.graphics.setColor(1,1,1)
 	love.graphics.print("hello!", 250, 250)
+	love.graphics.print("hola!", 350, 250)
 end
