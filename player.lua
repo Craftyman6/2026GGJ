@@ -12,10 +12,14 @@ player = {
 	dx = 0,
 	y = 0,
 	dy = 0,
-	w = 60,
-	h = 100,
+	w = 50,
+	h = 90,
 	airborne = true,
 	pressedAOrD = false,
+	facingRight = false,
+	sprites = {
+		love.graphics.newImage("Assets/Player/stand.png")
+	},
 	load = function()
 		player.x = 0
 		player.y = 0--windowH - player.h
@@ -49,10 +53,16 @@ player = {
 		local slideX = player.pressedAOrD and 1 or 2
 		player.dx = mid(-maxXV, mid(player.dx + slideV*slideX*dt, 0, player.dx - slideV*slideX*dt), maxXV)
 		player.y = mid(0, player.y, windowH-groundH-player.h)
+		if player.dx > 0 then player.facingRight = true 
+		elseif player.dx < 0 then player.facingRight = false end
 	end,
 	draw = function()
-		rect(player.x, player.y, player.w, player.h, {1,1,1})
-		text(player.dx, player.x, player.y - 30, 12, {1,1,1})
+		img(player.sprites[1], player.x + (player.facingRight and player.w or 0), player.y, 0, 2*(player.facingRight and -1 or 1), 2)
+
+		-- TESTING
+
+		--rect(player.x, player.y, player.w, player.h, {1,1,1})
+		--text(player.dx, player.x, player.y - 30, 12, {1,1,1})
 	end
 }
 
