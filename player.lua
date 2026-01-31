@@ -24,13 +24,13 @@ player = {
 		player.pressedAOrD = false
 		if player.airborne then
 			local down = love.keyboard.isDown("s")
-			local up = love.keyboard.isDown("space")
+			local up = love.keyboard.isDown("w")
 			player.dy = down and math.max(player.dy, 0) or player.dy
 			player.dy = player.dy + dt*gravityV*(down and 2 or 1)*(up and .5 or 1)
 			if player.y + player.h >= windowH - groundH then
 				player.airborne = false
 			end
-		elseif love.keyboard.isDown("space") then
+		elseif love.keyboard.isDown("w") then
 			player.airborne = true
 			player.dy = jumpV
 		end
@@ -49,7 +49,6 @@ player = {
 		local slideX = player.pressedAOrD and 1 or 2
 		player.dx = mid(-maxXV, mid(player.dx + slideV*slideX*dt, 0, player.dx - slideV*slideX*dt), maxXV)
 		player.y = mid(0, player.y, windowH-groundH-player.h)
-		--player.dy = math.min(terminalV, player.dy)
 	end,
 	draw = function()
 		rect(player.x, player.y, player.w, player.h, {1,1,1})
