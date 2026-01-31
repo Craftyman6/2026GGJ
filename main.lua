@@ -25,6 +25,7 @@ function love.draw()
 	love.graphics.setColor(1,1,1)
 	love.graphics.print("hello!", 250, 250)
 	rectLine(0, 0, windowW, windowH, {1,1,1})
+	background.draw()
 	player.draw()
 
 	Camera.detach()

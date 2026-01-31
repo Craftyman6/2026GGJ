@@ -1,6 +1,6 @@
-require("misc")
+require("middleclass")
 
-background = {
+projectile = {
 	image = "",
 	x = 0,
 	load = function()
@@ -14,4 +14,4 @@ background = {
 	end
 }
 
-return background
+return projectile
