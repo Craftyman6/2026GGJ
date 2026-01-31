@@ -17,18 +17,22 @@ player = {
 	dy = 0,
 	w = 50,
 	h = 90,
+	time = 0,
 	airborne = true,
 	pressedAOrD = false,
 	facingRight = false,
+	sprite = 1,
 	sprites = {
-		love.graphics.newImage("Assets/Player/stand.png")
+		love.graphics.newImage("Assets/Player/stand.png"),
+		love.graphics.newImage("Assets/Player/step1.png"),
+		love.graphics.newImage("Assets/Player/step2.png")
 	},
 	load = function()
 		player.x = 0
 		player.y = 0--windowH - player.h
-
 	end,
 	update = function(dt)
+		player.time = player.time + dt
 		player.pressedAOrD = false
 		if player.airborne then
 			local down = love.keyboard.isDown("s")
@@ -71,9 +75,13 @@ player = {
 				projectileList[i]:update()
 			end
 		end
+
+		player.sprite = (math.abs(player.dx) > 130 and 
+			2 + (math.floor(5*player.time%2)) 
+		or 1)
 	end,
 	draw = function()
-		img(player.sprites[1], player.x + (player.facingRight and player.w or 0), player.y, 0, 2*(player.facingRight and -1 or 1), 2)
+		img(player.sprites[player.sprite], player.x + (player.facingRight and player.w or 0), player.y, 0, 2*(player.facingRight and -1 or 1), 2)
 
 		-- TESTING
 
