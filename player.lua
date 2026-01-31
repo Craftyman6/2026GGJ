@@ -66,6 +66,11 @@ player = {
 		player.y = mid(0, player.y, windowH-groundH-player.h)
 		if player.dx > 0 then player.facingRight = true 
 		elseif player.dx < 0 then player.facingRight = false end
+		if areProjectiles then
+			for i = 1, #projectileList do
+				projectileList[i]:update()
+			end
+		end
 	end,
 	draw = function()
 		img(player.sprites[1], player.x + (player.facingRight and player.w or 0), player.y, 0, 2*(player.facingRight and -1 or 1), 2)
