@@ -4,6 +4,7 @@ groundH = 20
 player = require("player")
 Camera = require "CameraMgr".newManager()
 background = require("background")
+require("Enemy.enemy")
 require("projectile")
 projectile = Projectile:new(0, 0, "Assets/Projectiles/projectile.jpg")
 
@@ -11,12 +12,14 @@ function love.load()
 	love.window.setMode(windowW, windowH)
 	background.load()
 	player.load()
+	testEnemy = Enemy:new(1000, 0, 1)
 end
 
 function love.update(dt)
 	player.update(dt)
 	Camera.setCoords(player.x, 360)
 	Camera.update(dt)
+	testEnemy:update(dt)
 end
 
 function love.draw()
@@ -30,5 +33,7 @@ function love.draw()
 	background.draw()
 	projectile:draw()
 	player.draw()
+	testEnemy:draw()
+
 	Camera.detach()
 end
