@@ -60,7 +60,7 @@ function EnemyProjectile:waterUpdate(dt)
 	if self.x < 0 then self.dx = math.abs(self.dx)
 	elseif self.x > roomW-self.w then self.dx = -math.abs(self.dx) end
 	-- Delete after 3 seconds
-	return self.time > 3
+	return self.time > 2.5
 end
 function EnemyProjectile:ballUpdate(dt)
 	-- Move horizontally
