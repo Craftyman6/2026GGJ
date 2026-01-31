@@ -23,6 +23,15 @@ projectileData = {
 		dmg = 1,
 		stamina = 6,
 		spritesheet = love.graphics.newImage("Assets/Projectiles/water.png")
+	},
+	-- 2: Ball
+	{
+		w = 10,
+		h = 10,
+		cooldown = .1,
+		dmg = .5,
+		stamina = 3,
+		spritesheet = love.graphics.newImage("Assets/Projectiles/ball.png")
 	}
 }
 

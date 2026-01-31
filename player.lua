@@ -1,4 +1,5 @@
 require("misc")
+require("mask")
 
 terminalV = 400
 gravityV = 700
@@ -23,6 +24,9 @@ player = {
 	timeSinceShoot = 0,
 	stamina = 50,
 	maxStamina = 50,
+	masks = {Mask:new(0, 0, 1)},
+	iFrames = 0,
+	maxIFrames = 1,
 	sprites = {
 		love.graphics.newImage("Assets/Player/stand.png"),
 		love.graphics.newImage("Assets/Player/step1.png"),
@@ -30,14 +34,22 @@ player = {
 		love.graphics.newImage("Assets/Player/jump1.png"),
 		love.graphics.newImage("Assets/Player/jump2.png")
 	},
+	-- Returns top mask
+	getMask = function()
+		return player.masks[#player.masks]
+	end,
+	getMaskID = function()
+		return player.masks[#player.masks].id
+	end,
 	load = function()
 		player.x = 0
-		player.y = 0--windowH - player.h
+		player.y = windowH - groundH - player.h
 	end,
 	update = function(dt)
 		-- Time variables
 		player.time = player.time + dt
 		player.timeSinceShoot = player.timeSinceShoot + dt
+		player.iFrames = math.max(0, player.iFrames - dt)
 
 		-- Jumping
 		player.pressedAOrD = false
@@ -65,14 +77,16 @@ player = {
 		end
 
 		-- Projectiles
-		player.stamina = math.min(player.maxStamina, player.stamina + dt*15)
-		local projectile = projectileData[getMaskID()]
-		if love.keyboard.isDown("space") and 
-		player.timeSinceShoot > projectile.cooldown and
-		player.stamina > projectile.stamina then
-			player.timeSinceShoot = 0
-			player.stamina = player.stamina - projectile.stamina
-			table.insert(allProjectiles, Projectile:new(player.x, player.y, getMaskID(), player.facingRight, player.airborne))
+		if #player.masks > 0 then
+			player.stamina = math.min(player.maxStamina, player.stamina + dt*15)
+			local projectile = projectileData[player.getMaskID()]
+			if love.keyboard.isDown("space") and 
+			player.timeSinceShoot > projectile.cooldown and
+			player.stamina > projectile.stamina then
+				player.timeSinceShoot = 0
+				player.stamina = player.stamina - projectile.stamina
+				table.insert(allProjectiles, Projectile:new(player.x, player.y, player.getMaskID(), player.facingRight, player.airborne))
+			end
 		end
 
 		-- Physics
@@ -84,7 +98,7 @@ player = {
 		player.dx = mid(-maxXV, mid(player.dx + slideV*slideX*dt, 0, player.dx - slideV*slideX*dt), maxXV)
 
 		-- Bound player
-		player.x = mid(0, player.x, roomW)
+		player.x = mid(0, player.x, roomW - player.w)
 		player.y = mid(0, player.y, windowH-groundH-player.h)
 		if player.dx > 0 then player.facingRight = true 
 		elseif player.dx < 0 then player.facingRight = false end
@@ -100,23 +114,37 @@ player = {
 				5
 			or
 				4)
+
+		-- Mask
+		if #player.masks > 0 then player.getMask():setPosition(player.x + 10, player.y + 9.5) end
+	end,
+	hit = function()
+		if player.iFrames <= 0 then
+			local lostMask = Mask:new(player.x, player.y - 50, table.remove(player.masks, #player.masks).id)
+			lostMask.time = lostMask.ttl - .5
+			table.insert(allMasks, lostMask)
+			player.iFrames = 3
+		end
 	end,
 	draw = function()
 		-- Sprite
-		img(player.sprites[player.sprite], player.x + (player.facingRight and player.w or 0), player.y, 0, 2*(player.facingRight and -1 or 1), 2)
-		-- Stamina
-		if player.stamina < player.maxStamina then
-			local staminaCol = ({{1,0,0},{0,1,0}})[player.stamina > projectileData[getMaskID()].stamina and 2 or 1]
-			line(player.x, player.y - 10, player.x + player.stamina + 1, player.y - 10, 2, staminaCol)
+		if player.iFrames <= 0 or player.time%.2 > .1 then
+			img(player.sprites[player.sprite], player.x + (player.facingRight and player.w or 0), player.y, 0, 2*(player.facingRight and -1 or 1), 2)
+		end
+		-- Mask
+		if #player.masks > 0 then
+			player.getMask():draw(.6) 
+			-- Stamina
+			if player.stamina < player.maxStamina then
+				local projectile = projectileData[player.getMaskID()]
+				local staminaCol = ({{1,0,0},{0,1,0},{.8,.9,0}})[player.stamina > projectile.stamina and (player.timeSinceShoot > projectile.cooldown and 2 or 3) or 1]
+				line(player.x, player.y - 10, player.x + player.stamina + 1, player.y - 10, 2, staminaCol)
+			end
 		end
 		-- TESTING
 		--rect(player.x, player.y, player.w, player.h, {1,1,1})
 		--text(player.dx, player.x, player.y - 30, 12, {1,1,1})
 	end
 }
-
-function getMaskID()
-	return 1
-end
 
 return player

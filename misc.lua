@@ -149,3 +149,14 @@ function inList(list, key)
 	end
 	return false
 end
+
+function hitboxesTouching(thing1, thing2)
+	return thing2.x < thing1.x + thing1.w and
+	thing1.x < thing2.x + thing2.w and
+	thing2.y < thing1.y + thing1.h and
+	thing1.y < thing2.y + thing2.h
+end
+
+function drawHitbox(thing)
+	rectLine(thing.x, thing.y, thing.w, thing.h, {1,1,1})
+end

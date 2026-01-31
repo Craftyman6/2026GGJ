@@ -1,35 +1,51 @@
+hitboxes = false
+
 windowW = 1280
 windowH = 720
 groundH = 20
+-- For reference, a room width of 1280 would be a room the size of the screen (the camera would never move)
 roomW = 2500
 camX = 0
 player = require("player")
 Camera = require "CameraMgr".newManager()
 background = require("background")
+map = require("map")
 require("Enemy.enemy")
+require("mask")
 require("Projectile.projectile")
 allEnemies = {}
 allProjectiles = {}
+allMasks = {}
 
 function love.load()
 	love.window.setMode(windowW, windowH)
 	background.load()
 	player.load()
-	testEnemy = Enemy:new(1000, 0, 1)
+	map.load()
 end
 
 function love.update(dt)
 	player.update(dt)
+	map.update(dt)
 
-	-- Have to iterate backwards to removing doesn't screw up
+	-- Have to iterate backwards so removing doesn't screw up
 	for i = #allProjectiles, 1, -1 do
 		if allProjectiles[i]:update(dt) then
 			table.remove(allProjectiles, i)
 		end
 	end
+	for i = #allMasks, 1, -1 do
+		if allMasks[i]:update(dt) then
+			table.remove(allMasks, i)
+		end
+	end
+	for i = #allEnemies, 1, -1 do
+		if allEnemies[i]:update(dt) then
+			table.remove(allEnemies, i)
+		end
+	end
 	moveCamera(dt)
 	Camera.update(dt)
-	testEnemy:update(dt)
 end
 
 function love.draw()
@@ -38,13 +54,24 @@ function love.draw()
 	background.draw()
 	rectLine(1,1, roomW-1, windowH-1, {1,1,1})
 	player.draw()
-	testEnemy:draw()
 
 	for i, projectile in ipairs(allProjectiles) do
 		projectile:draw()
 	end
+	for i, mask in ipairs(allMasks) do
+		mask:draw(1)
+	end
+	for i, enemy in ipairs(allEnemies) do
+		enemy:draw(1)
+	end
 
 	Camera.detach()
+
+	-- Health
+	for i, mask in ipairs(player.masks) do
+		img(mask.sprite, 10, 25*i - 10)
+	end
+	text(#player.masks, 0, 0, 12, {1,1,1})
 end
 
 function moveCamera(dt)
@@ -52,4 +79,9 @@ function moveCamera(dt)
 
 
 	Camera.setCoords(camX, 360)
+end
+
+-- TESTING
+function love.mousepressed(x, y, button)
+	table.insert(allMasks, Mask:new(x, y, 1))
 end
