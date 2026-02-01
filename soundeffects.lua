@@ -4,12 +4,13 @@ soundeffect = {
 	load = function()
 		--Projectiles
 		ballFX = love.audio.newSource("Assets/SoundEffects/ball.mp3", "static")
-		ballFX:setVolume(0.75)
+		ballFX:setVolume(0.6)
 		crowbarFX = love.audio.newSource("Assets/SoundEffects/crowbar.mp3", "static")
 		crowbarFX:setVolume(0.35)
 		laserFX = love.audio.newSource("Assets/SoundEffects/laser.mp3", "static")
 		rareCrowbarFX = love.audio.newSource("Assets/SoundEffects/rareCrowbar.mp3", "static")
 		fireFX = love.audio.newSource("Assets/SoundEffects/fire.mp3", "static")
+		fireFX:setVolume(.70)
 		flowerFX = love.audio.newSource("Assets/SoundEffects/flower.mp3", "static")
 		maskFX = love.audio.newSource("Assets/SoundEffects/mask.mp3", "static")
 		--Character

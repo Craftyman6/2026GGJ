@@ -55,6 +55,7 @@ map = {
 	time = 0,
 	currentRoom = rooms[1],
 	currentRoomID = 1,
+	finishMusic = true,
 	loadRoom = function()
 		roomW = map.currentRoom.w
 		camX = 0
@@ -74,6 +75,8 @@ map = {
 		elseif map.currentRoomID == 4 then
 			love.audio.stop()
 			music.level_3()
+		elseif map.currentRoomID == 6 then
+			music.level_boss()
 		end
 	end,
 	progressRoom = function()
@@ -92,6 +95,10 @@ map = {
 			else
 				map.progressRoom()
 			end
+		end
+		if gameFinish and map.currentRoomID == 6 and #allEnemies == 0 then
+			music.level_finish()
+			gameFinish = false
 		end
 	end,
 	-- oh and also boss screen textd
