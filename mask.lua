@@ -1,6 +1,7 @@
 local class = require("middleclass")
 require("misc")
 require("map")
+soundeffect = require("soundeffects")
 
 Mask = class('Mask')
 
@@ -56,6 +57,7 @@ function Mask:update(dt)
 	if hitboxesTouching(self, player) then
 		self.time = 0
 		table.insert(player.masks, self)
+		soundeffect:mask()
 		return true
 	end
 end

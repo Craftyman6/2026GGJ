@@ -1,4 +1,5 @@
 -- Enemy list contains enemy creation parameters {x, y, id}
+music = require("music")
 rooms = {
 	-- Room 1 (just a juggler)
 	{
@@ -63,6 +64,16 @@ map = {
 		allEnemies = {}
 		for i, enemy in ipairs(map.currentRoom.enemies) do
 			table.insert(allEnemies, Enemy:new(unpack(enemy)))
+		end
+		if map.currentRoomID == 1 then
+			music.level_0()
+		elseif map.currentRoomID == 2 then
+			music.level_1()
+		elseif map.currentRoomID == 3 then
+			music.level_2()
+		elseif map.currentRoomID == 4 then
+			love.audio.stop()
+			music.level_3()
 		end
 	end,
 	progressRoom = function()
