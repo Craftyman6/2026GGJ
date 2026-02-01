@@ -59,6 +59,7 @@ function love.draw()
 	local cx, cy = Camera.getCoords()
 
 	love.graphics.push()
+	love.graphics.setColor(1,1,1)
 
 	local backFactor = 0.3
 
@@ -66,11 +67,15 @@ function love.draw()
 
 	background.drawBack()
 
+	local backFactor = 0.4
+
+	love.graphics.translate(-cx * backFactor, -cy * backFactor)
+
+	background.drawColumns()
+
 	love.graphics.pop()
 
 	Camera.attach()
-
-	background.draw()
 	rectLine(1,1, roomW-1, windowH-1, {1,1,1})
 
 	for i, projectile in ipairs(allProjectiles) do
@@ -95,6 +100,16 @@ function love.draw()
 	-- Death message
 	if #player.masks == 0 then
 		death.drawWarn()
+	end
+
+	local tileSpacing = 40
+	local floorDisX = -camX%(tileSpacing*2)
+	for i = -3, 32 do
+		local col = i%2 == 0 and {.816, .784, .675} or {.71, .678, .569}
+		rect(tileSpacing*i + floorDisX,
+		windowH-groundH,
+		tileSpacing,
+		groundH, col)
 	end
 end
 
