@@ -96,10 +96,6 @@ map = {
 				map.progressRoom()
 			end
 		end
-		if gameFinish and map.currentRoomID == 6 and #allEnemies == 0 then
-			music.level_finish()
-			gameFinish = false
-		end
 	end,
 	-- oh and also boss screen textd
 	drawTutorial = function()

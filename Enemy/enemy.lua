@@ -2,6 +2,7 @@ local class = require("middleclass")
 enemyData = require("Enemy.enemyData")
 require("Projectile.enemyProjectile")
 enemyProjectileData = require("Projectile.enemyProjectileData")
+music = require("music")
 
 Enemy = class('Enemy')
 
@@ -67,6 +68,7 @@ function Enemy:update(dt)
 				self.y + math.random()*self.h/2,
 				math.floor(i/3)+2))
 			end
+			music.level_finish()
 		else
 			-- drop mask
 			table.insert(allMasks, Mask:new(self.x + math.random()*self.w, self.y+math.random()*self.h/2, self.id))
