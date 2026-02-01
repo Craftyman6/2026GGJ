@@ -4,7 +4,8 @@ rooms = {
 	{
 		w = 2500,
 		enemies = {
-			{2300, windowH-groundH-80, 3}
+			{2300, windowH-groundH-80, 3},
+			{500, 30, 5}
 		}
 	},
 	-- Room 2

@@ -1,4 +1,4 @@
-hitboxes = false
+hitboxes = true
 
 windowW = 1280
 windowH = 720
@@ -53,7 +53,6 @@ function love.draw()
 
 	background.draw()
 	rectLine(1,1, roomW-1, windowH-1, {1,1,1})
-	player.draw()
 
 	for i, projectile in ipairs(allProjectiles) do
 		projectile:draw()
@@ -64,6 +63,7 @@ function love.draw()
 	for i, enemy in ipairs(allEnemies) do
 		enemy:draw(1)
 	end
+	player.draw()
 
 	Camera.detach()
 
@@ -83,5 +83,5 @@ end
 
 -- TESTING
 function love.mousepressed(x, y, button)
-	table.insert(allMasks, Mask:new(x, y, 1))
+	table.insert(allMasks, Mask:new(x, y, 5))
 end

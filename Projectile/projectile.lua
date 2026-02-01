@@ -26,7 +26,10 @@ function Projectile:initialize(x, y, id, facingRight, airborne)
 
 	if self.id == 1 then self:crowbarInitialize()
 	elseif self.id == 2 then self:waterInitialize()
-	elseif self.id == 3 then self:ballInitialize() end
+	elseif self.id == 3 then self:ballInitialize()
+	elseif self.id == 4 then self:fireInitialize()
+	elseif self.id == 5 then self:flowerInitialize()
+	end
 end
 
 -- Projectile specific initializing
@@ -50,6 +53,22 @@ function Projectile:ballInitialize()
 	-- Set sprite
 	self.sprite = self.sprites[1+math.floor(math.random()*4)]
 end
+function Projectile:fireInitialize()
+	-- Randomize x
+	self.x = self.x + math.random()*player.w
+	-- Randomize y
+	self.y = self.y + math.random()*player.h
+	-- No horizontal movement if in air, a lot of horizontal movement if on ground
+	self.dx = 500 * (self.airborne and 0 or (self.facingRight and 1 or -1)) * (math.random()/2+.5)
+	-- Send it down if in air, or no lateral if grounded
+	self.dy = self.airborne and 400 or -math.random()
+end
+function Projectile:flowerInitialize()
+	self.x = self.x - 50
+	self.y = self.y - 20
+	self.ttl = .5
+	player.jump()
+end
 
 function Projectile:update(dt)
 	-- Update time
@@ -64,7 +83,10 @@ function Projectile:update(dt)
 	-- Projectile updating
 	if self.id == 1 then return self:crowbarUpdate(dt)
 	elseif self.id == 2 then return self:waterUpdate(dt)
-	elseif self.id == 3 then return self:ballUpdate(dt) end
+	elseif self.id == 3 then return self:ballUpdate(dt)
+	elseif self.id == 4 then return self:fireUpdate(dt)
+	elseif self.id == 5 then return self:flowerUpdate(dt)
+	end
 end
 
 function Projectile:crowbarUpdate(dt)
@@ -102,6 +124,23 @@ function Projectile:ballUpdate(dt)
 
 	-- Delete when below floor
 	return self.y > windowH-groundH
+end
+function Projectile:fireUpdate(dt)
+	-- Physics
+	self.dx = mid(self.dx - 200*dt, 0, self.dx + 200*dt)
+	self.x = self.x + self.dx * dt
+	self.dy = self.dy - 300*dt
+	self.y = self.y + self.dy * dt
+
+	-- Sprites
+	self.sprite = self.sprites[1+math.floor(6*self.time%4)]
+
+	-- Delete when above ceiling
+	return self.y < -self.h
+end
+function Projectile:flowerUpdate(dt)
+	self.sprite = self.sprites[1+math.floor(7*self.time%4)]
+	return self.time > self.ttl
 end
 
 function Projectile:draw()

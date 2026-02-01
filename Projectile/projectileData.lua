@@ -24,7 +24,7 @@ projectileData = {
 		stamina = 6,
 		spritesheet = love.graphics.newImage("Assets/Projectiles/water.png")
 	},
-	-- 2: Ball
+	-- 3: Ball
 	{
 		w = 10,
 		h = 10,
@@ -32,6 +32,24 @@ projectileData = {
 		dmg = .5,
 		stamina = 3,
 		spritesheet = love.graphics.newImage("Assets/Projectiles/ball.png")
+	},
+	-- 4: Fire
+	{
+		w = 10,
+		h = 10,
+		cooldown = .03,
+		dmg = .4,
+		stamina = 1.5,
+		spritesheet = love.graphics.newImage("Assets/Projectiles/fire.png")
+	},
+	-- 5: Flower
+	{
+		w = 150,
+		h = 150,
+		cooldown = 1.5,
+		dmg = 4,
+		stamina = 30,
+		spritesheet = love.graphics.newImage("Assets/Projectiles/flower.png")
 	}
 }
 

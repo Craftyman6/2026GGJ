@@ -6,7 +6,9 @@ Mask = class('Mask')
 maskSprites = {
 	love.graphics.newImage("Assets/Mask/burglar.png"),
 	love.graphics.newImage("Assets/Mask/water.png"),
-	love.graphics.newImage("Assets/Mask/juggle.png")
+	love.graphics.newImage("Assets/Mask/juggle.png"),
+	love.graphics.newImage("Assets/Mask/fire.png"),
+	love.graphics.newImage("Assets/Mask/fly.png")
 }
 
 function Mask:initialize(x, y, id)

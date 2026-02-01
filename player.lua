@@ -45,6 +45,10 @@ player = {
 		player.x = 0
 		player.y = windowH - groundH - player.h
 	end,
+	jump = function()
+		player.airborne = true
+		player.dy = jumpV
+	end,
 	update = function(dt)
 		-- Time variables
 		player.time = player.time + dt
@@ -62,8 +66,7 @@ player = {
 				player.airborne = false
 			end
 		elseif love.keyboard.isDown("w") then
-			player.airborne = true
-			player.dy = jumpV
+			player.jump()
 		end
 
 		-- Horizontal Movement
