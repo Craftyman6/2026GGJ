@@ -86,11 +86,15 @@ map = {
 	end,
 	update = function(dt)
 		map.time = map.time + dt
-		if map.currentRoomID < #rooms and player.x >= roomW-player.w-1 then
-			map.progressRoom()
+		if player.x >= roomW-player.w-1 then
+			if map.currentRoomID == #rooms then
+				if #allEnemies == 0 then love.event.push("quit", "restart") end
+			else
+				map.progressRoom()
+			end
 		end
 	end,
-	-- oh and also boss screen text
+	-- oh and also boss screen textd
 	drawTutorial = function()
 		for i = 0, 1 do
 			if map.currentRoomID == 1 then
