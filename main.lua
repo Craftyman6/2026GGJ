@@ -11,6 +11,7 @@ Camera = require "CameraMgr".newManager()
 background = require("background")
 soundeffect = require("soundeffects")
 map = require("map")
+death = require("death")
 require("Enemy.enemy")
 require("mask")
 require("Projectile.projectile")
@@ -32,6 +33,7 @@ end
 function love.update(dt)
 	player.update(dt)
 	map.update(dt)
+	death.update(dt)
 
 	-- Have to iterate backwards so removing doesn't screw up
 	for i = #allProjectiles, 1, -1 do
@@ -87,9 +89,13 @@ function love.draw()
 
 	-- Health
 	for i, mask in ipairs(player.masks) do
-		img(mask.sprite, 10, 25*i - 10)
+		local y = 25 + 3*#player.masks*math.sin(player.time/#player.masks*5+i) + 3*#player.masks
+		img(mask.sprite, 10, y)
 	end
-	text(#player.masks, 0, 0, 12, {1,1,1})
+	-- Death message
+	if #player.masks == 0 then
+		death.drawWarn()
+	end
 end
 
 function moveCamera(dt)

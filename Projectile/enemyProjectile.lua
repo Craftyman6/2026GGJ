@@ -125,7 +125,7 @@ function EnemyProjectile:flowerUpdate(dt)
 end
 function EnemyProjectile:chandelierUpdate(dt)
 	-- Move laterally
-	self.dy = self.dy + dt*8
+	self.dy = self.dy + dt*6
 	self.y = self.y + self.dy
 	-- Sprite
 	self.sprite = self.sprites[1+math.floor(4*self.time%4)]
