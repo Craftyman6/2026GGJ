@@ -36,9 +36,9 @@ end
 -- Projectile specific initializing
 function Projectile:crowbarInitialize()
 	-- No horizontal movement if in air, a lot of horizontal movement if on ground
-	self.dx = 10 * (self.airborne and 0 or (self.facingRight and 1 or -1))
+	self.dx = 1000 * (self.airborne and 0 or (self.facingRight and 1 or -1))
 	-- Send it down if in air, or up if on ground
-	self.dy = self.airborne and 8 or (-3 - math.random())
+	self.dy = self.airborne and 800 or (-200 - math.random())
 	soundeffect.crowbar()
 end
 function Projectile:waterInitialize()
@@ -50,7 +50,7 @@ function Projectile:ballInitialize()
 	-- Randomize x
 	self.x = self.x + math.random()*player.w
 	-- Fully horizontal if in the air, only a little if grounded
-	self.dx = (self.facingRight and 1 or -1) * (self.airborne and 500 or 100) * (math.random()/2+.5)
+	self.dx = (self.facingRight and 1 or -1) * (self.airborne and 500 or 100) * (math.random()+.5)
 	-- No vertical if in the air, fully verticle if grounded
 	self.dy = (self.airborne and 0 or -500)
 	-- Set sprite
@@ -95,9 +95,9 @@ end
 
 function Projectile:crowbarUpdate(dt)
 	-- Physics
-	self.dy = self.dy + 10*dt
-	self.x = self.x + self.dx
-	self.y = self.y + self.dy
+	self.dy = self.dy + 1000*dt
+	self.x = self.x + self.dx * dt
+	self.y = self.y + self.dy * dt
 
 	-- Sprite
 	self.sprite = self.sprites[1+math.floor(4*self.time % 4)]

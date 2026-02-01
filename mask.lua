@@ -21,8 +21,8 @@ function Mask:initialize(x, y, id)
 	self.h = 30
 	self.id = id
 	self.sprite = maskSprites[id]
-	self.dx = map.currentRoomID == 1 and -4 or math.random()*8 - 4
-	self.dy = -20
+	self.dx = map.currentRoomID == 1 and -200 or math.random()*600 - 300
+	self.dy = -1500
 	self.grounded = false
 end
 
@@ -39,18 +39,18 @@ function Mask:update(dt)
 		self.dy = 0
 		self.y = windowH-groundH-self.h
 	else
-		self.dy = self.dy + 50*dt
+		self.dy = self.dy + 3000*dt
 		-- Bounce
 		if self.y > windowH-groundH-self.h then
-			self.dy = 5 - self.dy
+			self.dy = 700 - self.dy
 			self.y = windowH-groundH-self.h-1
 			if self.dy >= 0 then self.grounded = true end
 		end
 	end
 	if self.x < 0 then self.dx = math.abs(self.dx)
 	elseif self.x > roomW-self.w then self.dx = -math.abs(self.dx) end
-	self.x = self.x + self.dx
-	self.y = self.y + self.dy
+	self.x = self.x + self.dx * dt
+	self.y = self.y + self.dy * dt
 
 	-- Collect
 	if hitboxesTouching(self, player) then
