@@ -66,12 +66,14 @@ function Projectile:fireInitialize()
 	self.dx = 700 * (self.airborne and 0 or (self.facingRight and 1 or -1)) * (math.random()/3+.8)
 	-- Send it down if in air, or no lateral if grounded
 	self.dy = self.airborne and 400 or -math.random()
+	soundeffect.fire()
 end
 function Projectile:flowerInitialize()
 	self.x = self.x - 50 + (self.airborne and 0 or (self.facingRight and 30 or -30))
 	self.y = self.y - 20 + (self.airborne and 50 or 0)
 	self.ttl = .5
 	player.jump()
+	soundeffect.flower()
 end
 
 function Projectile:update(dt)
