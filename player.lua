@@ -11,7 +11,7 @@ jumpV = -500
 projectileData = require("Projectile.projectileData")
 
 player = {
-	x = 0,
+	x = 60,
 	dx = 0,
 	y = 0,
 	dy = 0,
@@ -21,7 +21,7 @@ player = {
 	airborne = true,
 	airSound = true,
 	pressedAOrD = false,
-	facingRight = false,
+	facingRight = true,
 	sprite = 1,
 	timeSinceShoot = 0,
 	stamina = 50,
@@ -44,7 +44,7 @@ player = {
 		return player.masks[#player.masks].id
 	end,
 	load = function()
-		player.x = 0
+		player.x = 60
 		player.y = windowH - groundH - player.h
 	end,
 	jump = function()

@@ -1,23 +1,57 @@
 -- Enemy list contains enemy creation parameters {x, y, id}
 rooms = {
-	-- Room 1
-	{
-		w = 2500,
-		enemies = {
-			{2300, windowH-groundH-80, 3},
-			{500, 30, 5}
-		}
-	},
-	-- Room 2
+	-- Room 1 (just a juggler)
 	{
 		w = 2000,
 		enemies = {
-			{1500, windowH-groundH-80, 2}
+			{1800, 0, 3},
+		}
+	},
+	-- Room 2 (just a water)
+	{
+		w = 1500,
+		enemies = {
+			{500, 0, 2}
+		}
+	},
+	-- Room 3 (2 water, juggler, fly)
+	{
+		w = 1500,
+		enemies = {
+			{1200, 0, 2},
+			{1500, 0, 2},
+			{1000, 0, 3},
+			{2000, 0, 5}
+		}
+	},
+	-- Room 4 (small room with chef)
+	{
+		w = 1280,
+		enemies = {
+			{400, 0, 4}
+		}
+	},
+	-- Room 5 (large room with one of everyone)
+	{
+		w = 2000,
+		enemies = {
+			{500, 0, 3},
+			{1000, 0, 2},
+			{1500, 0, 5},
+			{2000, 0, 4}
+		}
+	},
+	-- Room 6 (king)
+	{
+		w = 1280,
+		enemies = {
+			{500, 0, 6}
 		}
 	}
 }
 
 map = {
+	time = 0,
 	currentRoom = rooms[1],
 	currentRoomID = 1,
 	loadRoom = function()
@@ -39,9 +73,58 @@ map = {
 	load = function()
 		map.loadRoom()
 	end,
-	update = function()
+	update = function(dt)
+		map.time = map.time + dt
 		if map.currentRoomID < #rooms and player.x >= roomW-player.w-1 then
 			map.progressRoom()
+		end
+	end,
+	-- oh and also boss screen text
+	drawTutorial = function()
+		for i = 0, 1 do
+			if map.currentRoomID == 1 then
+				text("This masquerade's got cooler masks than any of your burglar masks at home.\nLet's resort to stealing!",
+				50, 50 + i*2, 30, {i,i,i})
+				text("Use A and D to move, and SPACE to attack.",
+				50, 150 + i*2, 30, {i,i,i})
+				text("Your attacks use stamina, so don't use it all at once!",
+				50, 240 + i*2, 30, {i,i,i})
+				if #allEnemies == 0 then 
+					text("After defeating maskers, you can take\ntheir mask!",
+					1300, 50 + i*2, 30, {i,i,i})
+					text("Masks not only protect you from hits...\nbut give you special attacks!",
+					1300, 150 + i*2, 30, {i,i,i})
+					text("You'll always have the ability of your\nfront mask. Check the top left of\nthe screen see your mask stack.",
+					1300, 250 + i*2, 30, {i,i,i})
+					text("Continue right to proceed.",
+					1300, 400 + i*2, 30, {i,i,i})
+				else
+					text("Look! A masker!",
+					1300, 50 + i*2, 30, {i,i,i})
+					text("Throw your crowbar at him without getting\nhit by his attacks.",
+					1300, 150 + i*2, 30, {i,i,i})
+				end
+			elseif map.currentRoomID == 2 then
+				if #allEnemies == 0 then 
+					text("One last thing. Press S in the air\nto drop!",
+					500, 50 + i*2, 30, {i,i,i})
+					text("Once you've mastered jumping,\nnothing can stop you!",
+					500, 150 + i*2, 30, {i,i,i})
+				else
+					text("Oh yeah, press W to jump!",
+					50, 50 + i*2, 30, {i,i,i})
+					text("Your attacks throw differently\nin the air, try it out!",
+					50, 150 + i*2, 30, {i,i,i})
+				end
+			elseif map.currentRoomID == 6 then
+				if #allEnemies == 0 then 
+					text("Thanks for playing!",
+					300, 200 + i*2, 70, {i,i,i})
+				else
+					text("Mask King",
+					450, 50 + i*2, 90, {i,math.cos(map.time/2),math.sin(map.time/2)})
+				end
+			end
 		end
 	end
 }

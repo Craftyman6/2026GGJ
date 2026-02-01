@@ -47,7 +47,7 @@ projectileData = {
 		w = 150,
 		h = 150,
 		cooldown = 1.5,
-		dmg = 4,
+		dmg = 10,
 		stamina = 30,
 		spritesheet = love.graphics.newImage("Assets/Projectiles/flower.png")
 	}

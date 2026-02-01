@@ -1,4 +1,4 @@
-hitboxes = true
+hitboxes = false
 
 windowW = 1280
 windowH = 720
@@ -21,8 +21,8 @@ allMasks = {}
 function love.load()
 	love.window.setMode(windowW, windowH)
 	background.load()
-	player.load()
 	map.load()
+	player.load()
 	soundeffect.load()
 	song = love.audio.newSource("Assets/Music/song.mp3", "stream")
 	song:setLooping(true)
@@ -81,6 +81,7 @@ function love.draw()
 		enemy:draw(1)
 	end
 	player.draw()
+	map.drawTutorial()
 
 	Camera.detach()
 
@@ -99,6 +100,8 @@ function moveCamera(dt)
 end
 
 -- TESTING
+--[[
 function love.mousepressed(x, y, button)
 	table.insert(allMasks, Mask:new(x, y, 5))
 end
+]]

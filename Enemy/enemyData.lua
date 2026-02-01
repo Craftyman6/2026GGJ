@@ -6,7 +6,7 @@ enemyData = {
 	{
 		w = 100,
 		h = 80,
-		cooldown = 1,
+		cooldown = 1.9,
 		health = 10,
 		spritesheet = love.graphics.newImage("Assets/Enemy/water.png")
 	},
@@ -18,7 +18,7 @@ enemyData = {
 		health = 7,
 		spritesheet = love.graphics.newImage("Assets/Enemy/juggler.png")
 	},
-	-- 3: Chef
+	-- 4: Chef
 	{
 		w = 60,
 		h = 70,
@@ -26,13 +26,21 @@ enemyData = {
 		health = 8,
 		spritesheet = love.graphics.newImage("Assets/Enemy/chef.png")
 	},
-	-- 3: Fly
+	-- 5: Fly
 	{
 		w = 80,
 		h = 90,
-		cooldown = 2.5,
+		cooldown = 2,
 		health = 5,
 		spritesheet = love.graphics.newImage("Assets/Enemy/fly.png")
+	},
+	-- 6: King
+	{
+		w = 200,
+		h = 400,
+		cooldown = .5,
+		health = 80,
+		spritesheet = love.graphics.newImage("Assets/Enemy/king.png")
 	}
 }
 

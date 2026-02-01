@@ -1,5 +1,6 @@
 local class = require("middleclass")
 require("misc")
+require("map")
 
 Mask = class('Mask')
 
@@ -13,14 +14,14 @@ maskSprites = {
 
 function Mask:initialize(x, y, id)
 	self.time = 0
-	self.ttl = 7
+	self.ttl = 10
 	self.x = x
 	self.y = y
 	self.w = 50
 	self.h = 30
 	self.id = id
 	self.sprite = maskSprites[id]
-	self.dx = math.random()*2 - 1
+	self.dx = map.currentRoomID == 1 and -4 or math.random()*8 - 4
 	self.dy = -20
 	self.grounded = false
 end

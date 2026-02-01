@@ -63,13 +63,13 @@ function Projectile:fireInitialize()
 	-- Randomize y
 	self.y = self.y + math.random()*player.h
 	-- No horizontal movement if in air, a lot of horizontal movement if on ground
-	self.dx = 500 * (self.airborne and 0 or (self.facingRight and 1 or -1)) * (math.random()/2+.5)
+	self.dx = 700 * (self.airborne and 0 or (self.facingRight and 1 or -1)) * (math.random()/3+.8)
 	-- Send it down if in air, or no lateral if grounded
 	self.dy = self.airborne and 400 or -math.random()
 end
 function Projectile:flowerInitialize()
-	self.x = self.x - 50
-	self.y = self.y - 20
+	self.x = self.x - 50 + (self.airborne and 0 or (self.facingRight and 30 or -30))
+	self.y = self.y - 20 + (self.airborne and 50 or 0)
 	self.ttl = .5
 	player.jump()
 end

@@ -1,17 +1,18 @@
 local class = require("middleclass")
 enemyData = require("Enemy.enemyData")
 require("Projectile.enemyProjectile")
+enemyProjectileData = require("Projectile.enemyProjectileData")
 
 Enemy = class('Enemy')
 
 function Enemy:initialize(x, y, id)
 	self.time = 0
 	self.x = x
-	self.y = y
 	self.id = id
 	local data = enemyData[id]
 	self.w = data.w
 	self.h = data.h
+	self.y = windowH-groundH-self.h
 	self.timeSinceShoot = 0
 	self.cooldown = data.cooldown
 	self.update = data.update
@@ -33,11 +34,12 @@ function Enemy:initialize(x, y, id)
 	elseif self.id == 3 then self:jugglerInitialize()
 	elseif self.id == 4 then self:chefInitialize()
 	elseif self.id == 5 then self:flyInitialize()
+	elseif self.id == 6 then self:kingInitialize()
 	end
 end
 
 function Enemy:waterInitialize()
-	self.dx = -100
+	self.dx = map.currentRoomID == 2 and 50 or -80
 end
 function Enemy:jugglerInitialize()
 	self.dx = -50
@@ -48,13 +50,27 @@ function Enemy:chefInitialize()
 end
 function Enemy:flyInitialize()
 	self.dx = -70
+	self.y = 30
+end
+function Enemy:kingInitialize()
+	self.dx = 80
 end
 
 function Enemy:update(dt)
 	-- Die if out of health
 	if self.health <= 0 then
-		-- drop mask
-		table.insert(allMasks, Mask:new(self.x, self.y, self.id))
+		if self.id == 6 then
+			allProjectiles = {}
+			for i = 0, 11 do
+				table.insert(allMasks, Mask:new(
+				self.x + math.random()*self.w,
+				self.y + math.random()*self.h/2,
+				math.floor(i/3)+2))
+			end
+		else
+			-- drop mask
+			table.insert(allMasks, Mask:new(self.x + math.random()*self.w, self.y+math.random()*self.h/2, self.id))
+		end
 		return true
 	end
 	self.time = self.time + dt
@@ -67,15 +83,23 @@ function Enemy:update(dt)
 	--self.y = math.min(self.y + 400*dt, windowH-groundH-self.h)
 
 	if self.timeSinceShoot > self.cooldown then
-		table.insert(allProjectiles, EnemyProjectile:new(self.x, self.y, self.id))
+		if self.id == 6 then
+			chandelier = enemyProjectileData[6]
+			table.insert(allProjectiles, EnemyProjectile:new(
+			math.random()*(roomW+2*chandelier.w)-chandelier.w,
+			-chandelier.h, self.id))
+		else
+			table.insert(allProjectiles, EnemyProjectile:new(self.x, self.y, self.id))
+		end
 		self.timeSinceShoot = 0
 	end
 
 	if self.id == 1 then -- There's no enemy of type 1
-	elseif self.id == 2 then -- Water guy doesn't need special code
+	elseif self.id == 2 then self:waterUpdate(dt)
 	elseif self.id == 3 then self:jugglerUpdate(dt)
 	elseif self.id == 4 then self:chefUpdate(dt)
 	elseif self.id == 5 then self:flyUpdate(dt)
+	elseif self.id == 6 then self:kingUpdate(dt)
 	end
 end
 
@@ -83,6 +107,7 @@ function Enemy:waterUpdate(dt)
 	self.sprite = self.sprites[math.floor(1 + (self.time % 2))]
 end
 function Enemy:jugglerUpdate(dt)
+	self.sprite = self.sprites[math.floor(1 + (5*self.time % 2))]
 	self.timeTillTurn = self.timeTillTurn - dt
 	if self.timeTillTurn < 0 then
 		self.dx = -self.dx
@@ -94,6 +119,10 @@ function Enemy:chefUpdate(dt)
 end
 function Enemy:flyUpdate(dt)
 	self.sprite = self.sprites[math.floor(1 + (3*self.time % 2))]
+end
+function Enemy:kingUpdate(dt)
+	self.sprite = self.sprites[math.floor(1 + (4*self.time % 2))]
+	self.cooldown = 1 + self.health/100
 end
 
 function Enemy:draw()

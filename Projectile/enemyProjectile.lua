@@ -4,8 +4,7 @@ enemyProjectileData = require("Projectile.enemyProjectileData")
 
 EnemyProjectile = class('EnemyProjectile')
 
--- extra is a table of extra variables for type specific stuff
-function EnemyProjectile:initialize(x, y, id)
+function EnemyProjectile:initialize(x, y, id, shardDx)
 	self.time = 0
 	self.x = x
 	self.y = y
@@ -27,6 +26,8 @@ function EnemyProjectile:initialize(x, y, id)
 	elseif self.id == 3 then self:ballInitialize()
 	elseif self.id == 4 then self:fireInitialize()
 	elseif self.id == 5 then self:flowerInitialize()
+	elseif self.id == 6 then self:chandelierInitialize()
+	elseif self.id == 7 then self:shardInitialize(shardDx)
 	end
 end
 
@@ -34,9 +35,11 @@ function EnemyProjectile:waterInitialize()
 	self.x = self.x + 30
 	self.y = windowH-groundH-self.h
 	-- 75% chance to throw projectile towards player
-	self.dx = math.random() > (player.x > self.x and .75 or .25) and -200 or 200
+	-- chances reverse if it's the first water guy
+	self.dx = math.random() > ((not (player.x > self.x) ~= not (map.currentRoomID == 2)) and .75 or .25) and -200 or 200
 end
 function EnemyProjectile:ballInitialize()
+	self.x = self.x + math.random()*60
 	self.dx = math.random()*300 - 150
 	self.dy = -500
 	self.sprite = self.sprites[1+math.floor(math.random()*4)]
@@ -48,6 +51,13 @@ end
 function EnemyProjectile:flowerInitialize()
 	self.dx = math.random()*250 - 125
 	self.dy = 30
+end
+function EnemyProjectile:chandelierInitialize()
+	self.dy = 1
+end
+function EnemyProjectile:shardInitialize(shardDx)
+	self.dx = shardDx*200
+	self.facingRight = shardDx > 0
 end
 
 function EnemyProjectile:update(dt)
@@ -64,6 +74,8 @@ function EnemyProjectile:update(dt)
 	elseif self.id == 3 then return self:ballUpdate(dt)
 	elseif self.id == 4 then return self:fireUpdate(dt)
 	elseif self.id == 5 then return self:flowerUpdate(dt)
+	elseif self.id == 6 then return self:chandelierUpdate(dt)
+	elseif self.id == 7 then return self:shardUpdate(dt)
 	end
 end
 
@@ -76,7 +88,7 @@ function EnemyProjectile:waterUpdate(dt)
 	-- Sprite
 	self.sprite = self.sprites[1+math.floor(3*self.time%4)]
 	-- Delete after 3 seconds
-	return self.time > 2.5
+	return self.time > 2
 end
 function EnemyProjectile:ballUpdate(dt)
 	-- Move horizontally
@@ -110,6 +122,35 @@ function EnemyProjectile:flowerUpdate(dt)
 	self.sprite = self.sprites[1+math.floor(2*self.time%4)]
 	-- Delete after going past floor
 	return self.y > windowH-groundH
+end
+function EnemyProjectile:chandelierUpdate(dt)
+	-- Move laterally
+	self.dy = self.dy + dt*8
+	self.y = self.y + self.dy
+	-- Sprite
+	self.sprite = self.sprites[1+math.floor(4*self.time%4)]
+	-- Delete after reaching half way into floor
+	if self.y > windowH-groundH-self.h/2 then
+		-- Make shards
+		for i = 1, -1, -2 do
+			table.insert(allProjectiles, EnemyProjectile:new(
+			self.x + self.w/2 + self.w/5*i, windowH-groundH-20, 7, i))
+		end
+		return true
+	end
+end
+function EnemyProjectile:shardUpdate(dt)
+	-- Move horizontally
+	self.dx = self.dx + self.dx * dt
+	self.x = self.x + self.dx * dt
+	-- Sprite
+	self.sprite = self.sprites[1+math.floor(5*self.time%4)]
+	-- Delete if off screen
+	if self.dx > 1 then
+		return self.x > roomW
+	else
+		return self.x < self.w
+	end
 end
 
 function EnemyProjectile:draw()
