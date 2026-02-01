@@ -57,6 +57,7 @@ function Mask:update(dt)
 	if hitboxesTouching(self, player) then
 		self.time = 0
 		table.insert(player.masks, self)
+		player.stamina=player.maxStamina
 		soundeffect:mask()
 		return true
 	end

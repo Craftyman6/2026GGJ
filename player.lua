@@ -49,10 +49,7 @@ player = {
 	end,
 	jump = function()
 		player.airborne = true
-		player.dy = jumpV		
-		if player.airSound then
-			soundeffect.jump()
-		end
+		player.dy = jumpV
 		player.airSound = false
 	end,
 	update = function(dt)
@@ -72,7 +69,10 @@ player = {
 				player.airborne = false
 				player.airSound = true
 			end
-		elseif love.keyboard.isDown("w") then
+		elseif love.keyboard.isDown("w") then	
+			if player.airSound then
+				soundeffect.jump()
+			end
 			player.jump()
 		end
 
@@ -132,6 +132,7 @@ player = {
 		if player.iFrames <= 0 then
 			local lostMask = Mask:new(player.x, player.y - 50, table.remove(player.masks, #player.masks).id)
 			lostMask.time = lostMask.ttl - .5
+			soundeffect:hit()
 			table.insert(allMasks, lostMask)
 			player.iFrames = 3
 		end

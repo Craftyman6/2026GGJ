@@ -3,6 +3,7 @@ enemyData = require("Enemy.enemyData")
 require("Projectile.enemyProjectile")
 enemyProjectileData = require("Projectile.enemyProjectileData")
 music = require("music")
+soundeffect = require("soundeffects")
 
 Enemy = class('Enemy')
 
@@ -60,6 +61,7 @@ end
 function Enemy:update(dt)
 	-- Die if out of health
 	if self.health <= 0 then
+		soundeffect:die()
 		if self.id == 6 then
 			allProjectiles = {}
 			for i = 0, 11 do

@@ -15,7 +15,11 @@ soundeffect = {
 		maskFX = love.audio.newSource("Assets/SoundEffects/mask.mp3", "static")
 		--Character
 		jumpFX = love.audio.newSource("Assets/SoundEffects/jump.mp3", "static")
-		jumpFX:setVolume(0.45)
+		jumpFX:setVolume(0.25)
+		hitFX = love.audio.newSource("Assets/SoundEffects/hit.mp3", "static")
+		hitFX:setVolume(2)
+		-- Enemy
+		dieFX = love.audio.newSource("Assets/SoundEffects/pop.wav", "static")
 	end,
 	update = function()
 		
@@ -56,5 +60,11 @@ soundeffect = {
 		jumpFX:setPitch(pitch)
 		jumpFX:play()
 	end,
+	hit = function()
+		hitFX:play()
+	end,
+	die = function()
+		dieFX:play()
+	end
 }
 return soundeffect

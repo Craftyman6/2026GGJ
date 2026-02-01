@@ -48,6 +48,13 @@ rooms = {
 		enemies = {
 			{500, 0, 6}
 		}
+	},
+	-- Room 7 (bonus)
+	{
+		w = 1600,
+		enemies = {
+			-- Filled in load
+		}
 	}
 }
 
@@ -85,13 +92,21 @@ map = {
 		map.loadRoom()
 	end,
 	load = function()
+		for i = 2, 5 do
+			for j = 1, 3 do
+				table.insert(rooms[7].enemies, {math.random()*1500, 0, i})
+			end
+		end
 		map.loadRoom()
 	end,
 	update = function(dt)
 		map.time = map.time + dt
 		if player.x >= roomW-player.w-1 then
-			if map.currentRoomID == #rooms then
-				if #allEnemies == 0 then love.event.push("quit", "restart") end
+			if map.currentRoomID == 6 then
+				if #allEnemies == 0 then 
+					map.progressRoom()
+				end
+			elseif map.currentRoomID == 7 then return
 			else
 				map.progressRoom()
 			end
@@ -101,12 +116,14 @@ map = {
 	drawTutorial = function()
 		for i = 0, 1 do
 			if map.currentRoomID == 1 then
+				text("Masker Raid",
+				50, 50 + i*2, 80, {i*.9,0,0})
 				text("This masquerade's got cooler masks than any of your burglar masks at home.\nLet's resort to stealing!",
-				50, 50 + i*2, 30, {i,i,i})
-				text("Use A and D to move, and SPACE to attack.",
 				50, 150 + i*2, 30, {i,i,i})
+				text("Use A and D to move, and SPACE to attack.",
+				50, 250 + i*2, 30, {i,i,i})
 				text("Your attacks use stamina, so don't use it all at once!",
-				50, 240 + i*2, 30, {i,i,i})
+				50, 340 + i*2, 30, {i,i,i})
 				if #allEnemies == 0 then 
 					text("After defeating maskers, you can take\ntheir mask!",
 					1300, 50 + i*2, 30, {i,i,i})
@@ -138,6 +155,8 @@ map = {
 				if #allEnemies == 0 then 
 					text("Thanks for playing!",
 					300, 200 + i*2, 70, {i,i,i})
+					text("Masker Raid | A Global Game Jam 2026 submission by:\n           Colin Schaffner & Logan Faulstich",
+					90, 350 + i*2, 40, {i,i,i})
 				else
 					text("Mask King",
 					450, 50 + i*2, 90, {i,math.cos(map.time/2),math.sin(map.time/2)})

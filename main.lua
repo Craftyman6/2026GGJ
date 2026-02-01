@@ -119,7 +119,7 @@ function moveCamera(dt)
 	Camera.setCoords(camX, 360)
 end
 
--- TESTING
+-- EPIC HAXOR CHEATZ
 --[[
 function love.mousepressed(x, y, button)
 	table.insert(allMasks, Mask:new(x, y, 5))
