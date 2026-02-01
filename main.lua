@@ -125,3 +125,9 @@ function love.mousepressed(x, y, button)
 	table.insert(allMasks, Mask:new(x, y, 5))
 end
 ]]
+
+function love.keypressed(key)
+    if key == "c" then
+        love.graphics.captureScreenshot(os.time() .. ".png")
+    end
+end

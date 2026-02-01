@@ -56,7 +56,7 @@ player = {
 		-- Time variables
 		player.time = player.time + dt
 		player.timeSinceShoot = player.timeSinceShoot + dt
-		player.iFrames = math.max(0, player.iFrames - dt)
+		player.iFrames = mid(0, player.iFrames - dt, player.maxIFrames)
 
 		-- Jumping
 		player.pressedAOrD = false
