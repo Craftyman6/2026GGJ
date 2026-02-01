@@ -9,6 +9,7 @@ camX = 0
 player = require("player")
 Camera = require "CameraMgr".newManager()
 background = require("background")
+soundeffect = require("soundeffects")
 map = require("map")
 require("Enemy.enemy")
 require("mask")
@@ -22,6 +23,10 @@ function love.load()
 	background.load()
 	player.load()
 	map.load()
+	soundeffect.load()
+	song = love.audio.newSource("Assets/Music/song.mp3", "stream")
+	song:setLooping(true)
+    love.audio.play(song)
 end
 
 function love.update(dt)
@@ -49,6 +54,18 @@ function love.update(dt)
 end
 
 function love.draw()
+	local cx, cy = Camera.getCoords()
+
+	love.graphics.push()
+
+	local backFactor = 0.3
+
+	love.graphics.translate(-cx * backFactor, -cy * backFactor)
+
+	background.drawBack()
+
+	love.graphics.pop()
+
 	Camera.attach()
 
 	background.draw()
