@@ -1,5 +1,6 @@
 local class = require("middleclass")
 require("misc")
+soundeffect = require("soundeffects")
 projectileData = require("Projectile.projectileData")
 
 Projectile = class('Projectile')
@@ -35,10 +36,12 @@ function Projectile:crowbarInitialize()
 	self.dx = 10 * (self.airborne and 0 or (self.facingRight and 1 or -1))
 	-- Send it down if in air, or up if on ground
 	self.dy = self.airborne and 8 or (-3 - math.random())
+	soundeffect.crowbar()
 end
 function Projectile:waterInitialize()
 	-- Random speed
 	self.speed = math.random()*200 + 400
+	soundeffect.laser()
 end
 function Projectile:ballInitialize()
 	-- Randomize x
@@ -49,6 +52,7 @@ function Projectile:ballInitialize()
 	self.dy = (self.airborne and 0 or -500)
 	-- Set sprite
 	self.sprite = self.sprites[1+math.floor(math.random()*4)]
+	soundeffect.ball()
 end
 
 function Projectile:update(dt)

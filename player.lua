@@ -1,5 +1,6 @@
 require("misc")
 require("mask")
+soundeffect = require("soundeffects")
 
 terminalV = 400
 gravityV = 700
@@ -18,6 +19,7 @@ player = {
 	h = 90,
 	time = 0,
 	airborne = true,
+	airSound = true,
 	pressedAOrD = false,
 	facingRight = false,
 	sprite = 1,
@@ -60,10 +62,15 @@ player = {
 			player.dy = player.dy + dt*gravityV*(down and 2 or 1)*(up and .5 or 1)
 			if player.y + player.h >= windowH - groundH then
 				player.airborne = false
+				player.airSound = true
 			end
 		elseif love.keyboard.isDown("w") then
 			player.airborne = true
 			player.dy = jumpV
+			if player.airSound then
+				soundeffect.jump()
+			end
+			player.airSound = false
 		end
 
 		-- Horizontal Movement
