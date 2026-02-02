@@ -107,6 +107,7 @@ map = {
 					map.progressRoom()
 				end
 			elseif map.currentRoomID == 7 then return
+				love.event.push("quit", "restart")
 			else
 				map.progressRoom()
 			end
